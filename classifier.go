@@ -22,7 +22,6 @@ type RuneClass string
 type RuneClassMap map[rune]RuneClass
 
 const (
-	CLASS_CHAR              string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#._-,/@$*()+=:;&^%~"
 	CLASS_SPACE             string = " \t\r\n"
 	CLASS_ESCAPING_QUOTE    string = "\""
 	CLASS_NONESCAPING_QUOTE string = "'"
@@ -54,7 +53,6 @@ func NewClassifier() *Classifier {
 		typeMap: make(RuneClassMap),
 	}
 
-	classifier.AddClassification(CLASS_CHAR, RUNE_CHAR)
 	classifier.AddClassification(CLASS_SPACE, RUNE_SPACE)
 	classifier.AddClassification(CLASS_ESCAPING_QUOTE, RUNE_QUOTE_DOUBLE)
 	classifier.AddClassification(CLASS_NONESCAPING_QUOTE, RUNE_QUOTE_SINGLE)
@@ -67,7 +65,12 @@ func NewClassifier() *Classifier {
 
 // Classify returns the rune token type.
 func (classifier *Classifier) Classify(r rune) RuneClass {
-	return classifier.typeMap[r]
+	if v, ok := classifier.typeMap[r]; ok {
+		return v
+	}
+	
+	// everything else is a char
+	return RUNE_CHAR
 }
 
 // addRuneClass registers a rune and it's classification.
