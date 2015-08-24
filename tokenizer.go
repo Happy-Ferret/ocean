@@ -19,6 +19,7 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
 )
 
@@ -47,6 +48,29 @@ const (
 	STATE_COMMENT         TokenState = 6
 	STATE_EMIT            TokenState = 7
 )
+
+func (ts TokenState) String() string {
+	switch ts {
+		case STATE_START:
+			return "START"
+		case STATE_WORD:
+			return "WORD"
+		case STATE_ESCAPING:
+			return "ESCAPING"
+		case STATE_ESCAPING_QUOTED:
+			return "ESCAPING_QUOTED"
+		case STATE_QUOTED_ESCAPING:
+			return "QUOTED_ESCAPING"
+		case STATE_QUOTED:
+			return "QUOTED"
+		case STATE_COMMENT:
+			return "COMMENT"
+		case STATE_EMIT:
+			return "EMIT"
+	}
+	
+	return fmt.Sprintf("!? %d", ts)
+}
 
 // Token represents a single "token" found within a stream.
 type Token struct {
@@ -152,7 +176,7 @@ SCAN:
 					}
 				default:
 					{
-						return nil, errorf("Unknown rune: %v", next)
+						return nil, errorf("Unknown rune in state %s: %v", state, next)
 					}
 				}
 			}
@@ -196,7 +220,7 @@ SCAN:
 					}
 				default:
 					{
-						return nil, errorf("Unknown rune: %v", next)
+						return nil, errorf("Unknown rune in state %s: %v", state, next)
 					}
 				}
 			}
@@ -216,7 +240,7 @@ SCAN:
 					}
 				default:
 					{
-						return nil, errorf("Unknown rune: %v", next)
+						return nil, errorf("Unknown rune in state %s: %v", state, next)
 					}
 				}
 			}
@@ -236,7 +260,7 @@ SCAN:
 					}
 				default:
 					{
-						return nil, errorf("Unknown rune: %v", next)
+						return nil, errorf("Unknown rune in state %s: %v", state, next)
 					}
 				}
 			}
@@ -263,7 +287,7 @@ SCAN:
 					}
 				default:
 					{
-						return nil, errorf("Unknown rune: %v", next)
+						return nil, errorf("Unknown rune in state %s: %v", state, next)
 					}
 				}
 			}
@@ -286,7 +310,7 @@ SCAN:
 					}
 				default:
 					{
-						return nil, errorf("Unknown rune: %v", next)
+						return nil, errorf("Unknown rune in state %s: %v", state, next)
 					}
 				}
 			}
@@ -313,7 +337,7 @@ SCAN:
 					}
 				default:
 					{
-						return nil, errorf("Unknown rune: %v", next)
+						return nil, errorf("Unknown rune in state %s: %v", state, next)
 					}
 				}
 			}
